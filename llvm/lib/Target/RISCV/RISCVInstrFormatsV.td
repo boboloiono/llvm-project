@@ -334,9 +334,14 @@ class RVInstVSX<bits<3> nf, bit mew, RISCVMOP mop, bits<3> width,
 // Matrix Configuration Instructions
 //===----------------------------------------------------------------------===//
 
+class RVInstVME<dag outs, dag ins, string opcodestr, string argstr>
+    : RVInst<outs, ins, opcodestr, argstr, [], InstFormatR> {
+  let Predicates = [HasVInstructions, HasStdExtVme];
+}
+
 // msetmtype
 class RVInstMSetMType<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInst<outs, ins, opcodestr, argstr, [], InstFormatR> {
+    : RVInstVME<outs, ins, opcodestr, argstr> {
   bits<5> rs2;
   bits<5> rs1;
 
@@ -354,7 +359,7 @@ class RVInstMSetMType<dag outs, dag ins, string opcodestr, string argstr>
 // msettn / msettm / msettk
 class RVInstMSetT<bits<5> subop,
                   dag outs, dag ins, string opcodestr, string argstr>
-    : RVInst<outs, ins, opcodestr, argstr, [], InstFormatI> {
+    : RVInstVME<outs, ins, opcodestr, argstr> {
   bits<5> rs1;
   bits<5> rd;
 
@@ -373,13 +378,14 @@ class RVInstMSetT<bits<5> subop,
 // msetmtypei
 class RVInstMSetMTypei<dag outs, dag ins, string opcodestr, string argstr>
     : RVInst<outs, ins, opcodestr, argstr, [], InstFormatI> {
-  bits<2> vsewi;
-  bits<5> mtypei;
+      let Predicates = [HasVInstructions, HasStdExtVme];
+  bits<2> uimm2;
+  bits<5> uimm5;
 
   let Inst{31-25} = 0b1000010;
-  let Inst{24-23} = vsewi{1:0};
+  let Inst{24-23} = uimm2;
   let Inst{22-20} = 0b011;
-  let Inst{19-15} = mtypei{4:0};
+  let Inst{19-15} = uimm5;
   let Inst{14-12} = 0b111;
   let Inst{11-7}  = 0b00000;
   let Opcode = OPC_OP_V.Value;
@@ -395,7 +401,7 @@ class RVInstMSetMTypei<dag outs, dag ins, string opcodestr, string argstr>
 
 class RVInstVMETVV<bits<3> funct3, bits<2> variant,
                    dag outs, dag ins, string opcodestr, string argstr>
-    : RVInst<outs, ins, opcodestr, argstr, [], InstFormatR> {
+    : RVInstVME<outs, ins, opcodestr, argstr> {
   bits<5> vs2;
   bits<5> vs1;
   bits<5> rd;
@@ -433,10 +439,9 @@ class RVInstVTMMS_TVV<dag outs, dag ins, string opcodestr, string argstr>
 // vtle*
 class RVInstVTLE<bits<3> nf_or_eew,
                  dag outs, dag ins, string opcodestr, string argstr>
-    : RVInst<outs, ins, opcodestr, argstr, [], InstFormatR> {
+    : RVInstVME<outs, ins, opcodestr, argstr> {
   bits<5> rs2;
   bits<5> rs1;
-  bits<5> vd;
 
   let Inst{31-29} = nf_or_eew;
   let Inst{28}    = 1;
@@ -445,7 +450,7 @@ class RVInstVTLE<bits<3> nf_or_eew,
   let Inst{24-20} = rs2;
   let Inst{19-15} = rs1;
   let Inst{14-12} = 0b011;
-  let Inst{11-7}  = vd;
+  let Inst{11-7}  = 0b00000;
   let Opcode = OPC_LOAD_FP.Value;
 
   let Uses = [VTYPE, VL];
@@ -454,10 +459,9 @@ class RVInstVTLE<bits<3> nf_or_eew,
 // vtse*
 class RVInstVTSE<bits<3> nf_or_eew,
                  dag outs, dag ins, string opcodestr, string argstr>
-    : RVInst<outs, ins, opcodestr, argstr, [], InstFormatR> {
+    : RVInstVME<outs, ins, opcodestr, argstr> {
   bits<5> rs2;
   bits<5> rs1;
-  bits<5> vs3;
 
   let Inst{31-29} = nf_or_eew;
   let Inst{28}    = 1;
@@ -466,7 +470,7 @@ class RVInstVTSE<bits<3> nf_or_eew,
   let Inst{24-20} = rs2;
   let Inst{19-15} = rs1;
   let Inst{14-12} = 0b011;
-  let Inst{11-7}  = vs3;
+  let Inst{11-7}  = 0b00000;
   let Opcode = OPC_STORE_FP.Value;
 
   let Uses = [VTYPE, VL];
@@ -498,7 +502,7 @@ class RVInstVTSE64<dag outs, dag ins, string opcodestr, string argstr>
 
 // vtmv.v.t
 class RVInstVTMV_V_T<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInst<outs, ins, opcodestr, argstr, [], InstFormatR> {
+    : RVInstVME<outs, ins, opcodestr, argstr> {
   bits<5> rs1;
   bits<5> vd;
 
@@ -515,7 +519,7 @@ class RVInstVTMV_V_T<dag outs, dag ins, string opcodestr, string argstr>
 
 // vtmv.t.v
 class RVInstVTMV_T_V<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInst<outs, ins, opcodestr, argstr, [], InstFormatR> {
+    : RVInstVME<outs, ins, opcodestr, argstr> {
   bits<5> vs2;
   bits<5> rs1;
 
@@ -536,7 +540,7 @@ class RVInstVTMV_T_V<dag outs, dag ins, string opcodestr, string argstr>
 
 // vtzero
 class RVInstVTZero<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInst<outs, ins, opcodestr, argstr, [], InstFormatR> {
+    : RVInstVME<outs, ins, opcodestr, argstr> {
   bits<5> rd;
 
   let Inst{31-26} = 0b010000;
@@ -556,7 +560,7 @@ class RVInstVTZero<dag outs, dag ins, string opcodestr, string argstr>
 
 // vtdiscard
 class RVInstVTDiscard<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInst<outs, ins, opcodestr, argstr, [], InstFormatR> {
+    : RVInstVME<outs, ins, opcodestr, argstr> {
   let Inst{31-26} = 0b010000;
   let Inst{25}    = 1;
   let Inst{24-20} = 0b11100;

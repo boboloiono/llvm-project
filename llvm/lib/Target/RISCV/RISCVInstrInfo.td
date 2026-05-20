@@ -1656,6 +1656,7 @@ include "RISCVInstrInfoC.td"
 include "RISCVInstrInfoZb.td"
 include "RISCVInstrInfoZk.td"
 include "RISCVInstrInfoV.td"
+include "RISCVInstrInfoVme.td"
 include "RISCVInstrInfoZfh.td"
 
 //===----------------------------------------------------------------------===//
@@ -1669,4 +1670,3 @@ include "RISCVInstrInfoXsmallfloat.td"
 include "RISCVInstrInfoXpulp.td"
 include "RISCVInstrInfoXcopift.td"
 include "RISCVInstrInfoXvmxdotp.td"
-include "RISCVInstrInfoVme.td"
