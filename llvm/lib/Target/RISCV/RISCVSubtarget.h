@@ -99,6 +99,9 @@ private:
   bool HasStdExtZbs = false;
   bool HasStdExtZbt = false;
   bool HasStdExtV = false;
+  // <-- Start of vector matrix extensions
+  bool HasStdExtVme = false;
+  // -->
   bool HasStdExtZve32x = false;
   bool HasStdExtZve32f = false;
   bool HasStdExtZve64x = false;

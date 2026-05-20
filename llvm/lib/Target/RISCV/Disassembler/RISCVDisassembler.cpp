@@ -183,6 +183,70 @@ static DecodeStatus DecodeVRRegisterClass(MCInst &Inst, uint64_t RegNo,
   return MCDisassembler::Success;
 }
 
+static DecodeStatus DecodeMTRegisterClass(MCInst &Inst, uint64_t RegNo,
+                                          uint64_t Address,
+                                          const void *Decoder) {
+  if (RegNo >= 16)
+    return MCDisassembler::Fail;
+
+  MCRegister Reg;
+  switch (RegNo) {
+  default:
+    return MCDisassembler::Fail;
+  case 0:
+    Reg = RISCV::MT0;
+    break;
+  case 1:
+    Reg = RISCV::MT1;
+    break;
+  case 2:
+    Reg = RISCV::MT2;
+    break;
+  case 3:
+    Reg = RISCV::MT3;
+    break;
+  case 4:
+    Reg = RISCV::MT4;
+    break;
+  case 5:
+    Reg = RISCV::MT5;
+    break;
+  case 6:
+    Reg = RISCV::MT6;
+    break;
+  case 7:
+    Reg = RISCV::MT7;
+    break;
+  case 8:
+    Reg = RISCV::MT8;
+    break;
+  case 9:
+    Reg = RISCV::MT9;
+    break;
+  case 10:
+    Reg = RISCV::MT10;
+    break;
+  case 11:
+    Reg = RISCV::MT11;
+    break;
+  case 12:
+    Reg = RISCV::MT12;
+    break;
+  case 13:
+    Reg = RISCV::MT13;
+    break;
+  case 14:
+    Reg = RISCV::MT14;
+    break;
+  case 15:
+    Reg = RISCV::MT15;
+    break;
+  }
+
+  Inst.addOperand(MCOperand::createReg(Reg));
+  return MCDisassembler::Success;
+}
+
 static DecodeStatus DecodeVRM2RegisterClass(MCInst &Inst, uint64_t RegNo,
                                             uint64_t Address,
                                             const void *Decoder) {
