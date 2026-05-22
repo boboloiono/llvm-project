@@ -395,12 +395,13 @@ def HasVInstructionsAnyF : Predicate<"Subtarget->hasVInstructionsAnyF()">,
           "'V' (Vector Extension for Application Processors), 'Zve32f', "
           "'Zve64f' or 'Zve64d' (Vector Extensions for Embedded Processors)">;
 
-def FeatureStdExtVme
-    : SubtargetFeature<"experimental-vme", "HasStdExtVme", "true",
-                       "'Vme' (Vector Matrix Instructions)">;
+def FeatureExtXVme
+  : SubtargetFeature<"experimental-xvme", "HasStdExtVme", "true",
+                     "'XVme' (Vector Matrix Instructions)">;
+
 def HasStdExtVme : Predicate<"Subtarget->hasStdExtVme()">,
-                             AssemblerPredicate<(all_of FeatureStdExtVme),
-                             "'Vme' (Vector Matrix Instructions)">;
+                             AssemblerPredicate<(all_of FeatureExtXVme),
+                             "'XVme' (Vector Matrix Instructions)">;
                              
 def FeatureStdExtZvfh
     : SubtargetFeature<"experimental-zvfh", "HasStdExtZvfh", "true",
