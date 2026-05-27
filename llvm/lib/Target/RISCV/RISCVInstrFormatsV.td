@@ -402,14 +402,14 @@ class RVInstMSetMTypei<dag outs, dag ins, string opcodestr, string argstr>
 class RVInstVMETVV<bits<3> funct3, bits<2> variant,
                    dag outs, dag ins, string opcodestr, string argstr>
     : RVInstVME<outs, ins, opcodestr, argstr> {
-  bits<5> vs2;
-  bits<5> vs1;
+  bits<5> vt2;
+  bits<5> vt1;
   bits<5> rd;
 
   let Inst{31-26} = 0b111100;
   let Inst{25}    = 1;
-  let Inst{24-20} = vs2;
-  let Inst{19-15} = vs1;
+  let Inst{24-20} = vt2;
+  let Inst{19-15} = vt1;
   let Inst{14-12} = funct3;
   let Inst{11-9}  = rd{4-2};
   let Inst{8-7}   = variant;

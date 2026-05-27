@@ -90,23 +90,23 @@ let hasSideEffects = 1, mayLoad = 0, mayStore = 0 in {
 
 def VTMMS_TVV : RVInstVTMMS_TVV
   (outs MTRegOp:$rd),
-  (ins VR:$vs2, VR:$vs1),
-  "vtmms.tvv", "$rd, $vs2, $vs1">;
+  (ins VR:$vt2, VR:$vt1),
+  "vtmms.tvv", "$rd, $vt2, $vt1">;
 
 def VTMMU_TVV : RVInstVTMMU_TVV
   (outs MTRegOp:$rd),
-  (ins VR:$vs2, VR:$vs1),
-  "vtmmu.tvv", "$rd, $vs2, $vs1">;
+  (ins VR:$vt2, VR:$vt1),
+  "vtmmu.tvv", "$rd, $vt2, $vt1">;
 
 def VTFMM_TVV : RVInstVTFMM_TVV
   (outs MTRegOp:$rd),
-  (ins VR:$vs2, VR:$vs1),
-  "vtfmm.tvv", "$rd, $vs2, $vs1">;
+  (ins VR:$vt2, VR:$vt1),
+  "vtfmm.tvv", "$rd, $vt2, $vt1">;
 
 def VTFMM_ALT_TVV : RVInstVTFMM_ALT_TVV
   (outs MTRegOp:$rd),
-  (ins VR:$vs2, VR:$vs1),
-  "vtfmm.alt.tvv", "$rd, $vs2, $vs1">;
+  (ins VR:$vt2, VR:$vt1),
+  "vtfmm.alt.tvv", "$rd, $vt2, $vt1">;
 
 } // arithmetic
 
