@@ -72,14 +72,14 @@ def VTSE64 : RVInstVTSE64<(outs), (ins GPR:$rs2, GPR:$rs1),
 let hasSideEffects = 1, mayLoad = 0, mayStore = 0 in {
 
 def VTMV_V_T : RVInstVTMV_V_T
-  (outs VR:$vd),
-  (ins GPR:$rs1),       // rs1 = TSS scalar value
-  "vtmv.v.t", "$vd, $rs1">;
+  (outs),
+  (ins GPR:$rs1, VR:$vd),   // rs1 = TSS scalar value
+  "vtmv.v.t", "$rs1, $vd">;
 
 def VTMV_T_V : RVInstVTMV_T_V
   (outs),
-  (ins GPR:$rs1, VR:$vs2),  // rs1 = TSS scalar value
-  "vtmv.t.v", "$rs1, $vs2">;
+  (ins VR:$vs2, GPR:$rs1),  // rs1 = TSS scalar value
+  "vtmv.t.v", "$vs2, $rs1">;
 
 } // VTMV
 
