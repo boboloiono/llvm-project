@@ -404,14 +404,14 @@ class RVInstVMETVV<bits<3> funct3, bits<2> variant,
     : RVInstVME<outs, ins, opcodestr, argstr> {
   bits<5> vt2;
   bits<5> vt1;
-  bits<5> rd;
+  bits<3> rd;
 
   let Inst{31-26} = 0b111100;
   let Inst{25}    = 1;
   let Inst{24-20} = vt2;
   let Inst{19-15} = vt1;
   let Inst{14-12} = funct3;
-  let Inst{11-9}  = rd{4-2};
+  let Inst{11-9}  = rd;
   let Inst{8-7}   = variant;
   let Opcode = OPC_OP_VE.Value;
 
@@ -541,14 +541,15 @@ class RVInstVTMV_T_V<dag outs, dag ins, string opcodestr, string argstr>
 // vtzero
 class RVInstVTZero<dag outs, dag ins, string opcodestr, string argstr>
     : RVInstVME<outs, ins, opcodestr, argstr> {
-  bits<5> rd;
+  bits<4> rd;
 
   let Inst{31-26} = 0b010000;
   let Inst{25}    = 1;
   let Inst{24-20} = 0b11110;
   let Inst{19-15} = 0b00000;
   let Inst{14-12} = 0b110;
-  let Inst{11-7}  = rd;
+  let Inst{11-8}  = rd;
+  let Inst{7}     = 0;
   let Opcode = OPC_OP_V.Value;
 
   let Uses = [VTYPE, VL];
