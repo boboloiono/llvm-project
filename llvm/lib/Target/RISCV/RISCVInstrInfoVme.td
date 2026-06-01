@@ -1,7 +1,5 @@
 //===-- RISCVInstrInfoVme.td - RISC-V VME instructions -----------*- tablegen -*-===//
 
-include "RISCVInstrFormatsV.td"
-
 // Matrix tile register operand.
 def MTRegOp : RegisterOperand<MT> {
   let DecoderMethod = "DecodeMTRegisterClass";
@@ -12,7 +10,7 @@ def MTRegOp : RegisterOperand<MT> {
 // --------------------
 let hasSideEffects = 1, mayLoad = 0, mayStore = 0 in {
 
-def MSETMTYPE : RVInstMSetMType
+def MSETMTYPE : RVInstMSetMType<
   (outs),
   (ins GPR:$rs2, GPR:$rs1),
   "msetmtype", "$rs1, $rs2">;
