@@ -27,7 +27,7 @@ def MSETTK : RVInstMSetT<0b00010,
   (outs GPR:$rd), (ins GPR:$rs1),
   "msettk", "$rd, $rs1">;
 
-def MSETMTYPEI : RVInstMSetMTypei
+def MSETMTYPEI : RVInstMSetMTypei<
   (outs),
   (ins uimm2:$uimm2, uimm5:$uimm5),
   "msetmtypei", "$uimm5, $uimm2">;
@@ -71,12 +71,12 @@ def VTSE64 : RVInstVTSE64<(outs), (ins GPR:$rs2, GPR:$rs1),
 // --------------------
 let hasSideEffects = 1, mayLoad = 0, mayStore = 0 in {
 
-def VTMV_V_T : RVInstVTMV_V_T
+def VTMV_V_T : RVInstVTMV_V_T<
   (outs VR:$vd),
   (ins GPR:$rs1),   // rs1 = TSS scalar value
   "vtmv.v.t", "$rs1, $vd">;
 
-def VTMV_T_V : RVInstVTMV_T_V
+def VTMV_T_V : RVInstVTMV_T_V<
   (outs),
   (ins VR:$vs2, GPR:$rs1),  // rs1 = TSS scalar value
   "vtmv.t.v", "$vs2, $rs1">;
@@ -88,22 +88,22 @@ def VTMV_T_V : RVInstVTMV_T_V
 // --------------------
 let hasSideEffects = 1, mayLoad = 0, mayStore = 0 in {
 
-def VTMMS_TVV : RVInstVTMMS_TVV
+def VTMMS_TVV : RVInstVTMMS_TVV<
   (outs MTRegOp:$rd),
   (ins VR:$vt2, VR:$vt1),
   "vtmms.tvv", "$rd, $vt2, $vt1">;
 
-def VTMMU_TVV : RVInstVTMMU_TVV
+def VTMMU_TVV : RVInstVTMMU_TVV<
   (outs MTRegOp:$rd),
   (ins VR:$vt2, VR:$vt1),
   "vtmmu.tvv", "$rd, $vt2, $vt1">;
 
-def VTFMM_TVV : RVInstVTFMM_TVV
+def VTFMM_TVV : RVInstVTFMM_TVV<
   (outs MTRegOp:$rd),
   (ins VR:$vt2, VR:$vt1),
   "vtfmm.tvv", "$rd, $vt2, $vt1">;
 
-def VTFMM_ALT_TVV : RVInstVTFMM_ALT_TVV
+def VTFMM_ALT_TVV : RVInstVTFMM_ALT_TVV<
   (outs MTRegOp:$rd),
   (ins VR:$vt2, VR:$vt1),
   "vtfmm.alt.tvv", "$rd, $vt2, $vt1">;
@@ -117,12 +117,12 @@ let hasSideEffects = 1, mayLoad = 0, mayStore = 0 in {
 
 // vtzero: rd specifies WHICH tile to zero — it is an INPUT tile register
 // The instruction does not write a scalar result, it modifies tile state
-def VTZERO : RVInstVTZero
+def VTZERO : RVInstVTZero<
   (outs),
   (ins MTRegOp:$rd),
   "vtzero", "$rd">;
 
-def VTDISCARD : RVInstVTDiscard
+def VTDISCARD : RVInstVTDiscard<
   (outs),
   (ins),
   "vtdiscard", "">;
