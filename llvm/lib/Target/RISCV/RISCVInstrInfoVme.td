@@ -1,5 +1,7 @@
 //===-- RISCVInstrInfoVme.td - RISC-V VME instructions -----------*- tablegen -*-===//
 
+include "RISCVInstrFormatsV.td"
+
 // Matrix tile register operand.
 def MTRegOp : RegisterOperand<MT> {
   let DecoderMethod = "DecodeMTRegisterClass";
