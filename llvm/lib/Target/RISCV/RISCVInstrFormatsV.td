@@ -496,17 +496,18 @@ class RVInstVTSE32<dag outs, dag ins, string opcodestr, string argstr>
 class RVInstVTSE64<dag outs, dag ins, string opcodestr, string argstr>
     : RVInstVTSE<0b011, outs, ins, opcodestr, argstr>;
 
+
 //===----------------------------------------------------------------------===//
 // Move Tile Subset between Tile State and Vector Registers
 //===----------------------------------------------------------------------===//
 
 // vtmv.v.t
-class RVInstVTMV_V_T<dag outs, dag ins, string opcodestr, string argstr>
+class RVInstVTMV_V_T<bits<6> funct6, outs, dag ins, string opcodestr, string argstr>
     : RVInstVME<outs, ins, opcodestr, argstr> {
   bits<5> rs1;
   bits<5> vd;
 
-  let Inst{31-26} = 0b010000;
+  let Inst{31-26} = funct6;
   let Inst{25}    = 1;
   let Inst{24-20} = 0b11111;
   let Inst{19-15} = rs1;
@@ -518,12 +519,12 @@ class RVInstVTMV_V_T<dag outs, dag ins, string opcodestr, string argstr>
 }
 
 // vtmv.t.v
-class RVInstVTMV_T_V<dag outs, dag ins, string opcodestr, string argstr>
+class RVInstVTMV_T_V<bits<6> funct6, dag outs, dag ins, string opcodestr, string argstr>
     : RVInstVME<outs, ins, opcodestr, argstr> {
   bits<5> vs2;
   bits<5> rs1;
 
-  let Inst{31-26} = 0b010111;
+  let Inst{31-26} = funct6;
   let Inst{25}    = 1;
   let Inst{24-20} = vs2;
   let Inst{19-15} = rs1;
