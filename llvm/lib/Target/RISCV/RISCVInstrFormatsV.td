@@ -502,7 +502,7 @@ class RVInstVTSE64<dag outs, dag ins, string opcodestr, string argstr>
 //===----------------------------------------------------------------------===//
 
 // vtmv.v.t
-class RVInstVTMV_V_T<bits<6> funct6, outs, dag ins, string opcodestr, string argstr>
+class RVInstVTMV_V_T<bits<6> funct6, dag outs, dag ins, string opcodestr, string argstr>
     : RVInstVME<outs, ins, opcodestr, argstr> {
   bits<5> rs1;
   bits<5> vd;
