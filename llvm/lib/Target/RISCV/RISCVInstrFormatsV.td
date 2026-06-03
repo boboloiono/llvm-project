@@ -1,6 +1,3 @@
- [
-                OutReg      (0, Range(8,  4)),   # rd[4:0] — tile specifier in rd[4:1]
-            ]   //===-- RISCVInstrFormatsV.td - RISCV V Instruction Formats --*- tablegen -*-=//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
