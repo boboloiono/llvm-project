@@ -78,7 +78,7 @@ def VTMV_V_T : RVInstVTMV_V_T<
   "vtmv.v.t", "$vd, $rs1">;
 
 def VTMV_T_V : RVInstVTMV_T_V<
-  0b010000,
+  0b010111,
   (outs),
   (ins GPR:$rs1, VR:$vs2),  // rs1 = TSS scalar value
   "vtmv.t.v", "$rs1, $vs2">;
