@@ -1,4 +1,6 @@
-//===-- RISCVInstrFormatsV.td - RISCV V Instruction Formats --*- tablegen -*-=//
+ [
+                OutReg      (0, Range(8,  4)),   # rd[4:0] — tile specifier in rd[4:1]
+            ]   //===-- RISCVInstrFormatsV.td - RISCV V Instruction Formats --*- tablegen -*-=//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -399,7 +401,7 @@ class RVInstMSetMTypei<dag outs, dag ins, string opcodestr, string argstr>
 // Matrix Arithmetic Instructions
 //===----------------------------------------------------------------------===//
 
-class RVInstVMETVV<bits<3> funct3, bits<2> variant,
+class RVInstVMETVV<bits<3> funct3, bits<1> variant,
                    dag outs, dag ins, string opcodestr, string argstr>
     : RVInstVME<outs, ins, opcodestr, argstr> {
   bits<5> vs2;
@@ -412,7 +414,7 @@ class RVInstVMETVV<bits<3> funct3, bits<2> variant,
   let Inst{19-15} = vs1;
   let Inst{14-12} = funct3;
   let Inst{11-8}  = rd;
-  let Inst{7}   = variant;
+  let Inst{7}     = variant;
   let Opcode = OPC_OP_VE.Value;
 
   let Uses = [VTYPE, VL];
