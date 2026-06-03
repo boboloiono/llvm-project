@@ -402,17 +402,17 @@ class RVInstMSetMTypei<dag outs, dag ins, string opcodestr, string argstr>
 class RVInstVMETVV<bits<3> funct3, bits<2> variant,
                    dag outs, dag ins, string opcodestr, string argstr>
     : RVInstVME<outs, ins, opcodestr, argstr> {
-  bits<5> vt2;
-  bits<5> vt1;
-  bits<3> rd;
+  bits<5> vs2;
+  bits<5> vs1;
+  bits<4> rd;
 
   let Inst{31-26} = 0b111100;
   let Inst{25}    = 1;
-  let Inst{24-20} = vt2;
-  let Inst{19-15} = vt1;
+  let Inst{24-20} = vs2;
+  let Inst{19-15} = vs1;
   let Inst{14-12} = funct3;
-  let Inst{11-9}  = rd;
-  let Inst{8-7}   = variant;
+  let Inst{11-8}  = rd;
+  let Inst{7}   = variant;
   let Opcode = OPC_OP_VE.Value;
 
   let Uses = [VTYPE, VL];
@@ -420,16 +420,16 @@ class RVInstVMETVV<bits<3> funct3, bits<2> variant,
 
 // Convenience classes for the four arithmetic encodings.
 class RVInstVTFMM_TVV<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInstVMETVV<0b001, 0b00, outs, ins, opcodestr, argstr>;
+    : RVInstVMETVV<0b001, 0b0, outs, ins, opcodestr, argstr>;
 
 class RVInstVTFMM_ALT_TVV<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInstVMETVV<0b001, 0b01, outs, ins, opcodestr, argstr>;
+    : RVInstVMETVV<0b001, 0b1, outs, ins, opcodestr, argstr>;
 
 class RVInstVTMMU_TVV<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInstVMETVV<0b000, 0b00, outs, ins, opcodestr, argstr>;
+    : RVInstVMETVV<0b000, 0b0, outs, ins, opcodestr, argstr>;
 
 class RVInstVTMMS_TVV<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInstVMETVV<0b000, 0b01, outs, ins, opcodestr, argstr>;
+    : RVInstVMETVV<0b000, 0b1, outs, ins, opcodestr, argstr>;
 
 //===----------------------------------------------------------------------===//
 // Load / Store Tile Subset to Memory
