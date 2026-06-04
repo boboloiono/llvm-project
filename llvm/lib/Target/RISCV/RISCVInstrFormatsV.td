@@ -448,7 +448,7 @@ class RVInstVTLE<bits<3> nf_or_eew,
   let Inst{25}    = 1;
   let Inst{24-20} = rs2;
   let Inst{19-15} = rs1;
-  let Inst{14-12} = 0b011;
+  let Inst{14-12} = 0b111;
   let Inst{11-7}  = 0b00000;
   let Opcode = OPC_LOAD_FP.Value;
 
@@ -468,7 +468,7 @@ class RVInstVTSE<bits<3> nf_or_eew,
   let Inst{25}    = 1;
   let Inst{24-20} = rs2;
   let Inst{19-15} = rs1;
-  let Inst{14-12} = 0b011;
+  let Inst{14-12} = 0b111;
   let Inst{11-7}  = 0b00000;
   let Opcode = OPC_STORE_FP.Value;
 
