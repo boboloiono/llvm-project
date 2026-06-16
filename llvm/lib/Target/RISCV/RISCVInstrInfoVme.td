@@ -29,8 +29,8 @@ def MSETTK : RVInstMSetT<0b00010,
 
 def MSETMTYPEI : RVInstMSetMTypei<
   (outs),
-  (ins uimm2:$uimm2, uimm5:$uimm5),
-  "msetmtypei", "$uimm5, $uimm2">;
+  (ins uimm3:$uimm3, uimm5:$uimm5),
+  "msetmtypei", "$uimm5, $uimm3">;
 
 } // Matrix Config
 
