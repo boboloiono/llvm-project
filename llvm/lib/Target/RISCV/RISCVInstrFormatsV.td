@@ -383,7 +383,7 @@ class RVInstMSetMTypei<dag outs, dag ins, string opcodestr, string argstr>
 
   let Inst{31-25} = 0b1000010;
   let Inst{24-22} = uimm3;
-  let Inst{22-20} = 0b011;
+  let Inst{21-20} = 0b11;
   let Inst{19-15} = uimm5;
   let Inst{14-12} = 0b111;
   let Inst{11-7}  = 0b00000;
