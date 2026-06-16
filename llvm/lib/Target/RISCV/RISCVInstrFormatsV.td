@@ -378,11 +378,11 @@ class RVInstMSetT<bits<5> subop,
 class RVInstMSetMTypei<dag outs, dag ins, string opcodestr, string argstr>
     : RVInst<outs, ins, opcodestr, argstr, [], InstFormatI> {
       let Predicates = [HasVInstructions, HasStdExtVme];
-  bits<2> uimm2;
+  bits<3> uimm3;
   bits<5> uimm5;
 
   let Inst{31-25} = 0b1000010;
-  let Inst{24-23} = uimm2;
+  let Inst{24-22} = uimm3;
   let Inst{22-20} = 0b011;
   let Inst{19-15} = uimm5;
   let Inst{14-12} = 0b111;
