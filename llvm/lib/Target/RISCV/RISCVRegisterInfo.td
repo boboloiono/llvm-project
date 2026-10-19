@@ -639,11 +639,20 @@ let RegAltNameIndices = [ABIRegAltName] in {
   def MT15 : RISCVReg<15, "mt15", ["mt15"]>, DwarfRegNum<[112]>;
 }
 
-// Matrix tile register class.
-// Use untyped to avoid treating tiles as normal scalar i32 registers.
+// Matrix tile register class. Tiles have a configuration-dependent size, so
+// use a non-zero placeholder spill size for this non-allocatable class.
 let isAllocatable = 0, CopyCost = -1 in
 def MT : RegisterClass<"RISCV", [untyped], 32,
                        (add (sequence "MT%u", 0, 15))> {
-  let Size = 256;
+  let Size = 32;
+  let DecoderMethod = "DecodeMTRegisterClass";
+}
+
+// Matrix arithmetic encodes only even-numbered tile specifiers.
+let isAllocatable = 0, CopyCost = -1 in
+def MTEven : RegisterClass<"RISCV", [untyped], 32,
+                           (add MT0, MT2, MT4, MT6,
+                                MT8, MT10, MT12, MT14)> {
+  let Size = 32;
   let DecoderMethod = "DecodeMTRegisterClass";
 }

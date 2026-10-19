@@ -1656,7 +1656,7 @@ include "RISCVInstrInfoC.td"
 include "RISCVInstrInfoZb.td"
 include "RISCVInstrInfoZk.td"
 include "RISCVInstrInfoV.td"
-include "RISCVInstrInfoVme.td"
+include "RISCVInstrInfoZvt.td"
 include "RISCVInstrInfoZfh.td"
 
 //===----------------------------------------------------------------------===//

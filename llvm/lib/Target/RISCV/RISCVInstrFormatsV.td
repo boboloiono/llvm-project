@@ -330,7 +330,7 @@ class RVInstVSX<bits<3> nf, bit mew, RISCVMOP mop, bits<3> width,
 }
 
 //===----------------------------------------------------------------------===//
-// Matrix Configuration Instructions
+// Zvt - Vector Matrix Extension
 //===----------------------------------------------------------------------===//
 
 class RVInstVME<dag outs, dag ins, string opcodestr, string argstr>
@@ -344,7 +344,9 @@ class RVInstMSetMType<dag outs, dag ins, string opcodestr, string argstr>
   bits<5> rs2;
   bits<5> rs1;
 
-  let Inst{31-25} = 0b1000001;
+  let Inst{31-29} = 0b100;
+  let Inst{28}    = 0;
+  let Inst{27-25} = 0b010;
   let Inst{24-20} = rs2;
   let Inst{19-15} = rs1;
   let Inst{14-12} = 0b111;
@@ -352,52 +354,49 @@ class RVInstMSetMType<dag outs, dag ins, string opcodestr, string argstr>
   let Opcode = OPC_OP_V.Value;
 
   let Defs = [VTYPE, VL];
-  let Uses = [VTYPE, VL];
 }
 
 // msettn / msettm / msettk
-class RVInstMSetT<bits<5> subop,
-                  dag outs, dag ins, string opcodestr, string argstr>
+class RVInstMSetT<bits<3> subop, dag outs, dag ins, string opcodestr, string argstr>
     : RVInstVME<outs, ins, opcodestr, argstr> {
   bits<5> rs1;
   bits<5> rd;
 
-  let Inst{31}    = 1;
-  let Inst{30-25} = 0b000010;
-  let Inst{24-20} = subop;
+  let Inst{31-29} = 0b100;
+  let Inst{28}    = 0;
+  let Inst{27-25} = 0b100;
+  let Inst{24-23} = 0b00;
+  let Inst{22-20} = subop;
   let Inst{19-15} = rs1;
   let Inst{14-12} = 0b111;
   let Inst{11-7}  = rd;
   let Opcode = OPC_OP_V.Value;
 
-  let Defs = [VTYPE, VL];
-  let Uses = [VTYPE, VL];
 }
 
 // msetmtypei
 class RVInstMSetMTypei<dag outs, dag ins, string opcodestr, string argstr>
     : RVInst<outs, ins, opcodestr, argstr, [], InstFormatI> {
       let Predicates = [HasVInstructions, HasStdExtVme];
-  bits<3> uimm3;
-  bits<5> uimm5;
+  bits<1> altfmt;
+  bits<2> vsew;
+  bits<2> mtwiden;
 
-  let Inst{31-25} = 0b1000010;
-  let Inst{24-22} = uimm3;
-  let Inst{21-20} = 0b11;
-  let Inst{19-15} = uimm5;
+  let Inst{31-29} = 0b100;
+  let Inst{28}    = altfmt;
+  let Inst{27-25} = 0b100;
+  let Inst{24-23} = vsew;
+  let Inst{22-20} = 0b100;
+  let Inst{19-17} = 0b000;
+  let Inst{16-15} = mtwiden;
   let Inst{14-12} = 0b111;
   let Inst{11-7}  = 0b00000;
   let Opcode = OPC_OP_V.Value;
 
   let Defs = [VTYPE, VL];
-  let Uses = [VTYPE, VL];
 }
 
-
-//===----------------------------------------------------------------------===//
-// Matrix Arithmetic Instructions
-//===----------------------------------------------------------------------===//
-
+// vtfmm / vtfmm_alt / vtmmu / vtmms
 class RVInstVMETVV<bits<3> funct3, bits<1> variant,
                    dag outs, dag ins, string opcodestr, string argstr>
     : RVInstVME<outs, ins, opcodestr, argstr> {
@@ -410,34 +409,16 @@ class RVInstVMETVV<bits<3> funct3, bits<1> variant,
   let Inst{24-20} = vs2;
   let Inst{19-15} = vs1;
   let Inst{14-12} = funct3;
-  let Inst{11-8}  = rd;
+  let Inst{11-9}  = rd{3-1};
+  let Inst{8}     = 0;
   let Inst{7}     = variant;
   let Opcode = OPC_OP_VE.Value;
 
   let Uses = [VTYPE, VL];
 }
 
-// Convenience classes for the four arithmetic encodings.
-class RVInstVTFMM_TVV<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInstVMETVV<0b001, 0b0, outs, ins, opcodestr, argstr>;
-
-class RVInstVTFMM_ALT_TVV<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInstVMETVV<0b001, 0b1, outs, ins, opcodestr, argstr>;
-
-class RVInstVTMMU_TVV<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInstVMETVV<0b000, 0b0, outs, ins, opcodestr, argstr>;
-
-class RVInstVTMMS_TVV<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInstVMETVV<0b000, 0b1, outs, ins, opcodestr, argstr>;
-
-//===----------------------------------------------------------------------===//
-// Load / Store Tile Subset to Memory
-//===----------------------------------------------------------------------===//
-
-
 // vtle*
-class RVInstVTLE<bits<3> nf_or_eew,
-                 dag outs, dag ins, string opcodestr, string argstr>
+class RVInstVTLE<bits<3> nf_or_eew, dag outs, dag ins, string opcodestr, string argstr>
     : RVInstVME<outs, ins, opcodestr, argstr> {
   bits<5> rs2;
   bits<5> rs1;
@@ -456,8 +437,7 @@ class RVInstVTLE<bits<3> nf_or_eew,
 }
 
 // vtse*
-class RVInstVTSE<bits<3> nf_or_eew,
-                 dag outs, dag ins, string opcodestr, string argstr>
+class RVInstVTSE<bits<3> nf_or_eew, dag outs, dag ins, string opcodestr, string argstr>
     : RVInstVME<outs, ins, opcodestr, argstr> {
   bits<5> rs2;
   bits<5> rs1;
@@ -474,31 +454,6 @@ class RVInstVTSE<bits<3> nf_or_eew,
 
   let Uses = [VTYPE, VL];
 }
-
-// Convenience classes for EEW-style encodings.
-// If your implementation wants different top-bit values, adjust these here.
-class RVInstVTLE8<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInstVTLE<0b000, outs, ins, opcodestr, argstr>;
-class RVInstVTLE16<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInstVTLE<0b001, outs, ins, opcodestr, argstr>;
-class RVInstVTLE32<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInstVTLE<0b010, outs, ins, opcodestr, argstr>;
-class RVInstVTLE64<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInstVTLE<0b011, outs, ins, opcodestr, argstr>;
-
-class RVInstVTSE8<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInstVTSE<0b000, outs, ins, opcodestr, argstr>;
-class RVInstVTSE16<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInstVTSE<0b001, outs, ins, opcodestr, argstr>;
-class RVInstVTSE32<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInstVTSE<0b010, outs, ins, opcodestr, argstr>;
-class RVInstVTSE64<dag outs, dag ins, string opcodestr, string argstr>
-    : RVInstVTSE<0b011, outs, ins, opcodestr, argstr>;
-
-
-//===----------------------------------------------------------------------===//
-// Move Tile Subset between Tile State and Vector Registers
-//===----------------------------------------------------------------------===//
 
 // vtmv.v.t
 class RVInstVTMV_V_T<bits<6> funct6, dag outs, dag ins, string opcodestr, string argstr>
@@ -534,10 +489,6 @@ class RVInstVTMV_T_V<bits<6> funct6, dag outs, dag ins, string opcodestr, string
   let Uses = [VTYPE, VL];
 }
 
-//===----------------------------------------------------------------------===//
-// Matrix Tile-Zero Instruction
-//===----------------------------------------------------------------------===//
-
 // vtzero
 class RVInstVTZero<dag outs, dag ins, string opcodestr, string argstr>
     : RVInstVME<outs, ins, opcodestr, argstr> {
@@ -555,10 +506,6 @@ class RVInstVTZero<dag outs, dag ins, string opcodestr, string argstr>
   let Uses = [VTYPE, VL];
 }
 
-//===----------------------------------------------------------------------===//
-// Zvt Context Discard Instruction
-//===----------------------------------------------------------------------===//
-
 // vtdiscard
 class RVInstVTDiscard<dag outs, dag ins, string opcodestr, string argstr>
     : RVInstVME<outs, ins, opcodestr, argstr> {
@@ -570,6 +517,5 @@ class RVInstVTDiscard<dag outs, dag ins, string opcodestr, string argstr>
   let Inst{11-7}  = 0b00000;
   let Opcode = OPC_OP_V.Value;
 
-  let Uses = [VTYPE, VL];
 }
 
