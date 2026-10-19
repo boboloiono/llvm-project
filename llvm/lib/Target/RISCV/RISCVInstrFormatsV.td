@@ -266,6 +266,37 @@ class RVInstVLX<bits<3> nf, bit mew, RISCVMOP mop, bits<3> width,
   let RVVConstraint = VMConstraint;
 }
 
+// VLXBLK uses custom-1 with the index vector in rs2.
+class RVInstVLXBLK<bits<3> width, dag outs, dag ins,
+                   string opcodestr, string argstr>
+    : RVInst<outs, ins, opcodestr, argstr, [], InstFormatR> {
+  bits<5> vs2;
+  bits<5> rs1;
+  bits<5> vd;
+
+  let Inst{31-25} = 0b0001100;
+  let Inst{24-20} = vs2;
+  let Inst{19-15} = rs1;
+  let Inst{14-12} = width;
+  let Inst{11-7} = vd;
+  let Opcode = OPC_CUSTOM_1.Value;
+
+  let Uses = [VTYPE, VL];
+}
+
+// Block length is selected by rs1 and has no integer destination.
+class RVInstVSETBLKLEN<dag outs, dag ins, string opcodestr, string argstr>
+    : RVInst<outs, ins, opcodestr, argstr, [], InstFormatR> {
+  bits<5> rs1;
+
+  let Inst{31-25} = 0b0001111;
+  let Inst{24-20} = 0b00000;
+  let Inst{19-15} = rs1;
+  let Inst{14-12} = 0b000;
+  let Inst{11-7} = 0b00000;
+  let Opcode = OPC_CUSTOM_1.Value;
+}
+
 class RVInstVSU<bits<3> nf, bit mew, RISCVLSUMOP sumop,
                 bits<3> width, dag outs, dag ins, string opcodestr,
                 string argstr>

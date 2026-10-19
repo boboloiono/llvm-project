@@ -150,6 +150,11 @@ class VIndexedLoad<RISCVMOP mop, RISCVWidth width, string opcodestr>
                 (ins GPR:$rs1, VR:$vs2, VMaskOp:$vm), opcodestr,
                 "$vd, (${rs1}), $vs2$vm">;
 
+class VIndexedBlockLoad<RISCVWidth width, string opcodestr>
+    : RVInstVLXBLK<width.Value{2-0},
+                   (outs VR:$vd), (ins GPR:$rs1, VR:$vs2),
+                   opcodestr, "$vd, (${rs1}), $vs2">;
+
 // unit-stride segment load vd, (rs1), vm
 class VUnitStrideSegmentLoad<bits<3> nf, RISCVWidth width, string opcodestr>
     : RVInstVLU<nf, width.Value{3}, LUMOPUnitStride, width.Value{2-0},
@@ -815,7 +820,18 @@ foreach eew = [8, 16, 32] in {
 }
 
 defm "" : VIndexLoadStore<[8, 16, 32]>;
+
+def VLXBLKEI8_V : VIndexedBlockLoad<LSWidth8, "vlxblkei8.v">,
+                  VLXSched<8, "U">;
+def VLXBLKEI16_V : VIndexedBlockLoad<LSWidth16, "vlxblkei16.v">,
+                   VLXSched<16, "U">;
 } // Predicates = [HasVInstructions]
+
+let Predicates = [HasVInstructions],
+    hasSideEffects = 1, mayLoad = 0, mayStore = 0 in {
+def VSETBLKLEN : RVInstVSETBLKLEN<(outs), (ins GPR:$rs1),
+                                "vsetblklen", "$rs1">;
+}
 
 let Predicates = [HasVInstructions] in {
 def VLM_V : VUnitStrideLoadMask<"vlm.v">,
